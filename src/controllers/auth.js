@@ -116,7 +116,6 @@ const authenticate = async (req, res, next) => {
 
 	// find token and verify token for identity
 	const token = auth.split(" ")[1]
-	console.log(token)
 	try {
 		const tokenInfo = jwt.verify(token, process.env.JWT_SECRET)
 		req.user = tokenInfo

@@ -31,12 +31,10 @@ const newPost = async(req, res) => {
             like: 0,
             price: req.body.price
         })
+        // need to add where we update the user schema
 
         if (newPost) {
-            return res.status(200).json({
-                message: "created successfully",
-                post: newPost,
-            })
+            return res.status(200).json(newPost)
         } else {
             return res.status(500).json({
                 message: "Error creating post."
@@ -53,6 +51,7 @@ const newPost = async(req, res) => {
 const deletePost = async(req, res) => {
     try {
         const deletedPost = await Post.findByIdAndDelete(req.params.id);
+        // need to delete the post from user's schema
 
         return res.status(200).json({ message: 'Deleted Post' });
     } catch(e) {
