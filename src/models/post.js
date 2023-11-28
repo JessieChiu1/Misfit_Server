@@ -1,5 +1,4 @@
 const mongoose = require("mongoose")
-const Article = require('./article');
 
 // create schema
 const postSchema = new mongoose.Schema({
@@ -26,12 +25,12 @@ const postSchema = new mongoose.Schema({
         required: true
     },
     like: {
-        type: Integer,
+        type: Number,
         default: 0,
     },
     price: {
-        type: Integer,
-    }
+        type: Number,
+    },
     // image
 })
 

@@ -2,9 +2,9 @@ const router = require("express").Router()
 const authController = require("../controllers/auth")
 const postController = require("../controllers/post")
 
-router.get("/:id", authController.authenticate, postController.findPost);
+router.post("/", authController.authenticate, postController.newPost);
 
-router.post("/post", authController.authenticate, postController.newPost);
+router.get("/:id", postController.findPost);
 
 router.delete("/:id", authController.authenticate, postController.deletePost);
 

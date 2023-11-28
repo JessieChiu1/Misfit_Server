@@ -1,4 +1,3 @@
-const Article = require("../models/article")
 const Post = require("../models/post")
 
 const findPost = async(req, res) => {
@@ -23,7 +22,6 @@ const findPost = async(req, res) => {
 
 const newPost = async(req, res) => {
     try{
-        articleList = createArticles(req.body.article)
         const newPost = await Post.create({
             user: req.params.id,
             title: req.body.title,
@@ -35,7 +33,10 @@ const newPost = async(req, res) => {
         })
 
         if (newPost) {
-            return res.status(200).json(newPost)
+            return res.status(200).json({
+                message: "created successfully",
+                post: newPost,
+            })
         } else {
             return res.status(500).json({
                 message: "Error creating post."
@@ -52,25 +53,12 @@ const newPost = async(req, res) => {
 const deletePost = async(req, res) => {
     try {
         const deletedPost = await Post.findByIdAndDelete(req.params.id);
-    
-        if (!deletedPost) {
-          return res.status(404).json({ message: 'Post not found' });
-        }
-    
-        // Find the author of the post
-        const author = await Author.findById(deletedPost.author);
-    
-        if (author) {
-          // Remove the post from the author's list of posts
-          author.posts.pull(deletedPost._id);
-          await author.save();
-        }
-    
+
         return res.status(200).json({ message: 'Deleted Post' });
     } catch(e) {
         console.log(e)
         return res.status(500).json({
-            message: `Internal Service Error. Please try again ${e}`
+            message: `Internal Service Error. Please try again. ${e}`
         })
     }
 }
