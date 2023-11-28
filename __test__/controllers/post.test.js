@@ -56,7 +56,7 @@ describe("post.js", () => {
             expect(response.body.style).toBe("Androgynous")
             expect(response.body.price).toBe(25)
             expect(response.body).toHaveProperty("_id")
-            // expect(len(foundUser.post)).toBe(1)
+            expect(foundUser.post).toHaveLength(1)
             
         })
 
@@ -93,6 +93,8 @@ describe("post.js", () => {
 
     describe("updating a post", () => {
         // setup
+        let id
+
         // write payload
         const payload = {
             "title": "blue hat",
@@ -101,18 +103,41 @@ describe("post.js", () => {
             "style": "Androgynous",
             "price": 25
         }
+
+        const newPayload = {
+            "title": "test hat",
+            "type": "Accessory",
+            "review": "testing testing",
+            "style": "Androgynous",
+            "price": 10
+        }
+
         // create the post
+        beforeEach(async () => {
+            // creating a test post
+            const response = await supertest(app).post(`/api/v1/post`).send(payload).set({ "Authorization": `Bearer ${token}` })
+
+            id = response.body._id.toString()
+        })        
 
         it("response correctly when post is updated", async () => {
             // act
-
+            const response = await supertest(app).put(`/api/v1/post/${id}`).send(newPayload).set({ "Authorization": `Bearer ${token}` })
             // expectation
             // check status code, message/output
+            expect(response.status).toBe(200)
+            expect(response.body.title).toBe("test hat")
+            expect(response.body.type).toBe("Accessory")
+            expect(response.body.review).toBe("testing testing")
+            expect(response.body.style).toBe("Androgynous")
+            expect(response.body.price).toBe(10)
         })
     })
 
     describe("deleting a post", () => {
         // setup
+        let id
+
         // write payload
         const payload = {
             "title": "blue hat",
@@ -121,13 +146,33 @@ describe("post.js", () => {
             "style": "Androgynous",
             "price": 25
         }
-        // create a new post
+
+        // create the post
+        beforeEach(async () => {
+            // creating a test post
+            const response = await supertest(app).post(`/api/v1/post`).send(payload).set({ "Authorization": `Bearer ${token}` })
+
+            id = response.body._id.toString()
+        })  
 
         it("response correctly when post is deleted", async () => {
             // act
+            // testing that User has 1 post before deleting
+            const foundUser = await User.findOne({
+                username: "jessie"
+            })
+            expect(foundUser.post).toHaveLength(1)
+            
+            const response = (await supertest(app).delete(`api/v1/post/${id}`)).set({ "Authorization": `Bearer ${token}` })
 
             // expectation
             // check status code, response message, user's post property is also updated
+            expect(response.status).toBe(200)
+            expect(response.body.message).toBe("Deleted Post")
+            // testing that User has no more post after deleting
+            expect(foundUser.post).toHaveLength(0)
+
+
         })
 
     })

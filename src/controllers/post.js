@@ -7,7 +7,7 @@ const findPost = async(req, res) => {
     
         if (!foundPost) {
             return res.status(404).json({
-                "message": "No such user found"
+                "message": "No such post found"
             })
         }
         
@@ -32,7 +32,7 @@ const newPost = async(req, res) => {
             price: req.body.price
         })
         // need to add where we update the user schema
-
+        
         if (newPost) {
             return res.status(200).json(newPost)
         } else {
