@@ -33,7 +33,7 @@ const signUp = async (req, res) => {
 		// the payload is the information stored in the JWT token
 		const payload = { 
 			username: newUser.username, 
-			id: newUser._id.toString() 
+			id: newUser._id.toString(),
 		};
 	
 		// create token, and sign the token
@@ -41,6 +41,15 @@ const signUp = async (req, res) => {
 			algorithm: "HS256",
 			expiresIn: "6h",
 		});
+
+		// Decode the token to retrieve iat and update the newUser's iat
+		// have to do this after the token is generate not before
+		const decodedToken = jwt.verify(authToken, process.env.JWT_SECRET);
+		const iatFromToken = decodedToken.iat;
+		await User.findOneAndUpdate(
+			{ username },
+			{ $set: { iat: iatFromToken } },
+		);
 		// then respond with the token
 		return res.status(200).json({
 			token: authToken,
@@ -92,7 +101,15 @@ const login = async (req, res) => {
 			algorithm: "HS256",
 			expiresIn: "6h",
 		})
-	
+		// Decode the new token to retrieve iat
+		const decodedToken = jwt.verify(authToken, process.env.JWT_SECRET);
+		const iatFromToken = decodedToken.iat;
+		// update the User's iat
+		await User.findOneAndUpdate(
+			{ username },
+			{ $set: { iat: iatFromToken } },
+		);
+
 		return res.status(200).json({
 			token: authToken
 		})
@@ -105,29 +122,38 @@ const login = async (req, res) => {
 }
 
 // authenticate
-const authenticate = async (req, res, next) => {
-	// check if auth exist in the header
-	const auth = req.headers.authorization
-	if (!auth) {
-		return res.status(400).json({
-			message: "missing token",
-		})
-	}
+// still need to add a check where the we compare if the token belongs to the user?
 
-	// find token and verify token for identity
-	const token = auth.split(" ")[1]
+const authenticate = async (req, res, next) => {
 	try {
-		const tokenInfo = jwt.verify(token, process.env.JWT_SECRET)
-		req.user = tokenInfo
+	  // check if auth exists in the header
+	  const auth = req.headers.authorization;
+	  if (!auth) {
+		return res.status(400).json({
+		  message: "missing token",
+		});
+	  }
+  
+	  // find token and verify token for identity
+	  const token = auth.split(" ")[1];
+	  const tokenInfo = jwt.verify(token, process.env.JWT_SECRET);
+	  const user = await User.findById(tokenInfo.id);
+  
+	  // add a check to see if the token matches with the user in DB
+	  if (user && user.iat === tokenInfo.iat) {
+		req.user = tokenInfo;
+		// console.log(req.user)
 		// next() -> tell express to trigger the next middleware
-		next()
-	} catch(e) {
-		console.log(e)
-		return res.status(401).json({
-			message: "unauthorized"
-		})
+		next();
+	  }
+	} catch (e) {
+	  console.log(e);
+	  return res.status(401).json({
+		message: "unauthorized",
+	  });
 	}
-}
+  };
+  
 
 module.exports = {
     signUp,

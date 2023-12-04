@@ -2,6 +2,7 @@ const router = require("express").Router()
 const authController = require("../controllers/auth")
 const postController = require("../controllers/post")
 
+// authorization add middleware
 router.post("/", authController.authenticate, postController.newPost);
 
 router.get("/:id", postController.findPost);

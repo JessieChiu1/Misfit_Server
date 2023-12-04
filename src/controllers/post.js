@@ -1,4 +1,5 @@
 const Post = require("../models/post")
+const User = require("../models/user")
 
 const findPost = async(req, res) => {
     try {
@@ -23,7 +24,7 @@ const findPost = async(req, res) => {
 const newPost = async(req, res) => {
     try{
         const newPost = await Post.create({
-            user: req.params.id,
+            user: req.user.id,
             title: req.body.title,
             type: req.body.type,
             review: req.body.review,
@@ -32,8 +33,13 @@ const newPost = async(req, res) => {
             price: req.body.price
         })
         // need to add where we update the user schema
-        
         if (newPost) {
+            // also update the User's post array with new post ID
+            await User.findByIdAndUpdate(
+                req.user.id,
+                { $push: { post: newPost._id } },
+                { new: true }
+            )
             return res.status(200).json(newPost)
         } else {
             return res.status(500).json({
@@ -50,8 +56,13 @@ const newPost = async(req, res) => {
 
 const deletePost = async(req, res) => {
     try {
-        const deletedPost = await Post.findByIdAndDelete(req.params.id);
-        // need to delete the post from user's schema
+        // delete post
+        await Post.findByIdAndDelete(req.params.id);
+        // remove the deleted post from User's post array
+        await User.findByIdAndUpdate(
+            req.user.id,
+            { $pull: { post: req.params.id } },
+        );
 
         return res.status(200).json({ message: 'Deleted Post' });
     } catch(e) {

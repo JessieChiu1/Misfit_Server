@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",
     }],
+    iat: {
+        type: Number,
+        default: 0
+    }
 })
 
 // export the schema

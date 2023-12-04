@@ -158,19 +158,23 @@ describe("post.js", () => {
         it("response correctly when post is deleted", async () => {
             // act
             // testing that User has 1 post before deleting
-            const foundUser = await User.findOne({
+            const foundUserBeforeDeletion  = await User.findOne({
                 username: "jessie"
             })
-            expect(foundUser.post).toHaveLength(1)
+            const expectedLen = foundUserBeforeDeletion .post.length - 1
             
-            const response = (await supertest(app).delete(`api/v1/post/${id}`)).set({ "Authorization": `Bearer ${token}` })
+            const response = await supertest(app).delete(`/api/v1/post/${id}`).set("Authorization", `Bearer ${token}`)
+
+            const foundUserAfterDeletion  = await User.findOne({
+                username: "jessie"
+            })
 
             // expectation
             // check status code, response message, user's post property is also updated
             expect(response.status).toBe(200)
             expect(response.body.message).toBe("Deleted Post")
-            // testing that User has no more post after deleting
-            expect(foundUser.post).toHaveLength(0)
+            // testing that User has 1 less post than before
+            expect(foundUserAfterDeletion.post).toHaveLength(expectedLen)
 
 
         })
