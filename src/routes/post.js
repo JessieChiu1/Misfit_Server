@@ -1,14 +1,14 @@
 const router = require("express").Router()
-const authController = require("../controllers/auth")
+const authMiddleware = require("../middleware/authenticate")
 const postController = require("../controllers/post")
 
 // authorization add middleware
-router.post("/", authController.authenticate, postController.newPost);
+router.post("/", authMiddleware.authenticate, postController.newPost);
 
 router.get("/:id", postController.findPost);
 
-router.delete("/:id", authController.authenticate, postController.deletePost);
+router.delete("/:id", authMiddleware.authenticate, postController.deletePost);
 
-router.put("/:id", authController.authenticate, postController.updatePost);
+router.put("/:id", authMiddleware.authenticate, postController.updatePost);
 
 module.exports = router

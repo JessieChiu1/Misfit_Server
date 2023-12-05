@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`user.js given user does not exist and userId should return 404 1`] = `
+{
+  "message": "No such user found",
+}
+`;

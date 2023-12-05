@@ -2,61 +2,63 @@ const app = require("../../src/app")
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const supertest = require("supertest");
 const mongoose = require("mongoose")
-const dotenv = require("dotenv/config");
-const jwt = require("jsonwebtoken")
 const User = require("../../src/models/user")
 
+const userPayload = {
+    "username": "jessie",
+    "password": "password"
+}
 
+let userId
+let token
 
 describe("user.js", () => {
 
     beforeAll(async () => {
         mongoServer = await MongoMemoryServer.create();
         await mongoose.connect(mongoServer.getUri());
-    });
+
+        // create User
+        const response = await supertest(app)
+            .post("/api/v1/auth/signup")
+            .send(userPayload)
+
+        token = response.body.token
+
+        const foundUser = await User.findOne({
+            "username": userPayload.username
+        })
+
+        userId = foundUser._id.toString()
+    })
     
     afterAll(async () => {
         await mongoose.disconnect();
         await mongoose.connection.close();
-    });
+    })
 
-    describe("user page", () => {
-        const payload = {
-            "username": "jessie",
-            "password": "password"
-        }
-        let id
-        let token
+    describe("given user does not exist and userId", () => {
+        it("should return 404", async () => {
+            // act
+            const fakeUserId = new mongoose.Types.ObjectId().toString();
 
-        describe("when user is signed in", () => {
-            beforeEach(async() => {
-                // delete the user if it exist
-                await User.findOneAndDelete({
-                    "username": payload.username,
-                })
-                // create user and get token
-                const response = await supertest(app).post("/api/v1/auth/signup").send(payload)
-                token = response.body.token
-                
-                const foundUser = await User.findOne({
-                    "username": payload.username
-                })
+            const response = await supertest(app)
+            .get(`/api/v1/user/${fakeUserId}`)
 
-                id = foundUser._id.toString()
-            })
-            it("response correctly when user is sign in", async() => {
-                // act
-                const response = await supertest(app)
-                    .get(`/api/v1/user/${id}`)
-                    .set({"Authorization": `Bearer ${token}`})
-                // expectation
-                // check out snapshot
-                // you don't want to have to edit the test case every time you change the original function
-                expect(response.status).toBe(200)
-                expect(response.body).toHaveProperty("username")
-                expect(typeof response.body.username).toBe("string")
-
-            })
+            // expectation
+            expect(response.status).toBe(404)
+            expect(response.body).toMatchSnapshot()
         })
     })
+
+    describe("given user exist and userId", () => {
+        it("should return 200 and username if user exists", async () => {
+            const response = await supertest(app)
+            .get(`/api/v1/user/${userId}`);
+
+            expect(response.status).toBe(200);
+            expect(response.body).toHaveProperty("username", userPayload.username);
+        });
+    })
+
 })

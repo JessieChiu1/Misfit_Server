@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`post.js creating a new post given User is not sign in should return 400 when creating a new post 1`] = `
+{
+  "message": "missing token",
+}
+`;
+
+exports[`post.js creating a new post given User is signed in should return 200, product and update User's post array 1`] = `
+{
+  "__v": 0,
+  "_id": Any<String>,
+  "like": 0,
+  "price": 25,
+  "review": "awesome",
+  "style": "Androgynous",
+  "title": "blue hat",
+  "type": "Accessory",
+  "user": Any<String>,
+}
+`;
+
+exports[`post.js deleting a post given the author of the post and postId should return 200, the message 'Deleted Post' and remove Post from User's post array 1`] = `
+{
+  "message": "Deleted Post",
+}
+`;
+
+exports[`post.js finding a post given the postId should return 200 and post 1`] = `
+{
+  "__v": 0,
+  "_id": Any<String>,
+  "like": 0,
+  "price": 25,
+  "review": "awesome",
+  "style": "Androgynous",
+  "title": "blue hat",
+  "type": "Accessory",
+  "user": Any<String>,
+}
+`;
+
+exports[`post.js updating a post given the postId and the updated post information should return 200 and the update post 1`] = `
+{
+  "__v": 0,
+  "_id": Any<String>,
+  "like": 0,
+  "price": 10,
+  "review": "testing testing",
+  "style": "Androgynous",
+  "title": "test hat",
+  "type": "Accessory",
+  "user": Any<String>,
+}
+`;

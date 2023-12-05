@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`auth.js login given a valid userPayload should return 400 1`] = `
+{
+  "token": Any<String>,
+}
+`;
+
+exports[`auth.js login given an invalid userPayload should return 400 1`] = `
+{
+  "message": "Incorrect Username or Password",
+}
+`;
+
+exports[`auth.js signup given userPayload should return 200 and jwt 1`] = `
+{
+  "token": Any<String>,
+}
+`;
