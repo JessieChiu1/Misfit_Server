@@ -32,12 +32,18 @@ This will be in your `.gitignore`
 
 ## File structures and file you will need to create
 - `__test__` jest testing folder
+    - `__snapshot__`
+        - `app.test.js.snap` - app.js snapshot output
     - `controllers` 
+        - `__snapshot__` - controllers function snapshot
+            - `auth.test.js.snap`
+            - `post.test.js.snap`
+            - `user.test.js.snap`
         - `auth.test.js` 
         - `post.test.js`
         - `user.test.js`
     - `app.test.js`
-- `coverage` - folder containing the jest summary
+- `coverage` - folder containing the jest coverage summary - meaning how much of the code did we test
 - `src` 
     - `config` database connection configuration
         - `db.js` mongodb connection file
@@ -45,6 +51,8 @@ This will be in your `.gitignore`
         - `auth.js`
         - `post.js`
         - `user.js`
+    - `middleware` all middleware
+        - `authenticate.js`
     - `models` - schema
         - `post.js`
         - `user.js`
@@ -59,7 +67,7 @@ This will be in your `.gitignore`
 
 ## libraries and what they are
 - `express` - framework for the Node.js backend. (Middleware, Routing, loading static files, error handling)
-- `dotenv` - access your sensitive information from the `.env` file, things such as API key, secret key, password, and other sensitive informations you don't want other to use
+- `dotenv` - access your sensitive information from the `.env` file, things such as API key, secret key, password, and other sensitive information you don't want other to use
 - `bcrypt` - used for securely hashing passwords, that's what the `SECRET_KEY` is for, a code to hash and un-hash the password for verification
 - `jsonwebtoken`
     - authentication and authorization tool
@@ -77,7 +85,6 @@ npm install express
 npm install dotenv
 npm install bcrypt
 npm install jsonwebtoken
-npm install morgan
 npm install supertest --save-dev
 npm install --save-dev jest
 npm install mongodb-memory-server --save-dev
