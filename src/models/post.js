@@ -31,7 +31,10 @@ const postSchema = new mongoose.Schema({
     price: {
         type: Number,
     },
-    // image
+    photo: {
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: "Photo"
+    }
 })
 
 // export the schema
