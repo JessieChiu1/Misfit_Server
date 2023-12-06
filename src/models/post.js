@@ -32,7 +32,7 @@ const postSchema = new mongoose.Schema({
         type: Number,
     },
     photo: {
-        type: Mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Photo"
     }
 })
