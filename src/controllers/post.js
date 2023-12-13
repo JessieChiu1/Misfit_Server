@@ -1,5 +1,6 @@
 const Post = require("../models/post")
 const User = require("../models/user")
+const s3Controller = require("./photoS3")
 
 const findPost = async(req, res) => {
     try {
@@ -56,7 +57,21 @@ const newPost = async(req, res) => {
 const deletePost = async(req, res) => {
     try {
         // delete post
-        await Post.findByIdAndDelete(req.params.id);
+        const deletedPost = await Post.findByIdAndDelete(req.params.id);
+
+        if (!deletedPost) {
+            return res.status(404).send("Post not found")
+        }
+
+        const photoIds = deletedPost.photo.map(photo => photo.id)
+
+        for (const photoId of photoIds) {
+            const photo = await Photo.findByIdAndDelete(photoId).lean()
+            if (photo) {
+                await s3.Controller.deleteImage(photo.mainKey)
+            }
+        }
+
         // remove the deleted post from User's post array
         await User.findByIdAndUpdate(
             req.user.id,

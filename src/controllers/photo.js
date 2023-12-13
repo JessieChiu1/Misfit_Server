@@ -1,6 +1,7 @@
 const s3Controller = require("./photoS3")
 const Photo = require("../models/photo")
 const Post = require("../models/post")
+const fs = require("fs")
 
 const getAllImage = async(req, res) => {
     try {
@@ -23,7 +24,7 @@ const getOne = async(req, res) => {
     }
 }
 
-const uploadOne = async(req, res, next) => {
+const uploadOne = async(req, res) => {
     try {
         // upload to AWS s3
         const photo_info = await s3Controller.uploadImage(req.file)
@@ -44,15 +45,15 @@ const uploadOne = async(req, res, next) => {
                 { $push: { photo: newPhoto._id }},
             )
         }
+        
+        await fs.unlinkSync(req.file.path)
 
-        req.nextCb = () => {
-            res.status(201).send({
-                id: newPhoto.id
-            })
-        }
-        next()
+        res.status(200).send({
+            id: newPhoto.id
+        })
+        
     } catch (e) {
-        next(e)
+        console.log(e)
     }
 }
 
@@ -75,8 +76,7 @@ const deleteOne = async(req, res) => {
 
         //delete from S3
         await s3Controller.deleteImage(photo.mainKey)
-        console.log("deleted image")
-        res.status(204).send()
+        res.status(204).send("deleted image")
     } catch (e) {
         console.log(e)
     }
