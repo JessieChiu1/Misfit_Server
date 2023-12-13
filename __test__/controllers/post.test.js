@@ -19,7 +19,8 @@ const postPayload = {
     "type": "Accessory",
     "review": "awesome",
     "style": "Androgynous",
-    "price": 25
+    "price": 25,
+    "photo": [],
 }
 
 const updatedPostPayload = {
@@ -27,7 +28,8 @@ const updatedPostPayload = {
     "type": "Accessory",
     "review": "testing testing",
     "style": "Androgynous",
-    "price": 10
+    "price": 10,
+    "photo": [],
 }
 
 describe("post.js", () => {

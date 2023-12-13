@@ -31,10 +31,10 @@ const postSchema = new mongoose.Schema({
     price: {
         type: Number,
     },
-    photo: {
+    photo: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Photo"
-    }
+    }]
 })
 
 // export the schema

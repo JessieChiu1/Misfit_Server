@@ -38,7 +38,6 @@ const newPost = async(req, res) => {
             await User.findByIdAndUpdate(
                 req.user.id,
                 { $push: { post: newPost._id } },
-                { new: true }
             )
             return res.status(200).json(newPost)
         } else {

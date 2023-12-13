@@ -1,8 +1,13 @@
 const mongoose = require("mongoose")
 
 const photoSchema = mongoose.Schema({
-    image: {
-        type: Buffer
+    mainUrl: {
+        type: String,
+        required: true,
+    },
+    mainKey: {
+        type: String,
+        required: true,
     }
 });
 
