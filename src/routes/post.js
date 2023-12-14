@@ -17,6 +17,6 @@ router.get("/masculine", postController.findAllMasculine)
 
 router.get("/feminine", postController.findAllFeminine)
 
-router.get("/queer", postController.findAllAndrogynous)
+router.get("/androgynous", postController.findAllAndrogynous)
 
 module.exports = router
