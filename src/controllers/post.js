@@ -114,6 +114,53 @@ const updatePost = async(req, res) => {
     }
 }
 
+const allPosts = async(req, res) => {
+    try {
+        const allPosts = await Post.find().sort({ createdAt: -1 })
+
+        return res.status(200).json(allPosts)
+    } catch (e) {
+        return res.status(500).json({
+            message: `Internal Service Error. Please try again ${e}`
+        })
+    }
+}
+
+const findAllMasculine = async(req, req) => {
+    try {
+        const masculinePosts = await Post.find({ style: "Masculine" }).sort({ createdAt: -1 })
+
+        return res.status(200).json(masculinePosts)
+    } catch (e) {
+        return res.status(500).json({
+            message: `Internal Service Error. Please try again ${e}`
+        })
+    }
+}
+
+const findAllFeminine = async(req, req) => {
+    try {
+        const femininePosts = await Post.find({ style: "Feminine" }).sort({ createdAt: -1 })
+
+        return res.status(200).json(femininePosts)
+    } catch (e) {
+        return res.status(500).json({
+            message: `Internal Service Error. Please try again ${e}`
+        })
+    }
+}
+
+const findAllAndrogynous = async(res, req) => {
+    try {
+        const AndrogynousPosts = await Post.find({ style: "Androgynous" }).sort({ createdAt: -1 })
+
+        return res.status(200).json(AndrogynousPosts)
+    } catch (e) {
+        return res.status(500).json({
+            message: `Internal Service Error. Please try again ${e}`
+        })
+    }
+}
 
 module.exports = {
     findPost,
@@ -121,4 +168,8 @@ module.exports = {
     deletePost,
     updatePost,
     deletePost,
+    allPosts,
+    findAllMasculine,
+    findAllFeminine,
+    findAllAndrogynous
 }

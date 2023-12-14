@@ -11,4 +11,12 @@ router.delete("/:id", authMiddleware.authenticate, postController.deletePost);
 
 router.put("/:id", authMiddleware.authenticate, postController.updatePost);
 
+router.get("/", postController.allPosts)
+
+router.get("/masculine", postController.findAllMasculine)
+
+router.get("/feminine", postController.findAllFeminine)
+
+router.get("/queer", postController.findAllAndrogynous)
+
 module.exports = router
