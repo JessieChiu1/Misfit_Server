@@ -13,10 +13,4 @@ router.put("/:id", authMiddleware.authenticate, postController.updatePost);
 
 router.get("/", postController.allPosts)
 
-router.get("/masculine", postController.findAllMasculine)
-
-router.get("/feminine", postController.findAllFeminine)
-
-router.get("/androgynous", postController.findAllAndrogynous)
-
 module.exports = router
