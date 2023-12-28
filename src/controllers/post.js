@@ -114,9 +114,21 @@ const updatePost = async(req, res) => {
     }
 }
 
-const allPosts = async(req, res) => {
+const findPostByStyle = async(req, res) => {
     try {
         const allPosts = await Post.find({ style: req.query.style}).sort({ createdAt: -1 })
+
+        return res.status(200).json(allPosts)
+    } catch (e) {
+        return res.status(500).json({
+            message: `Internal Service Error. Please try again ${e}`
+        })
+    }
+}
+
+const findLatestPost = async(req, res) => {
+    try {
+        const allPosts = await Post.find().sort({ createdAt: -1 }).limit(50)
 
         return res.status(200).json(allPosts)
     } catch (e) {
@@ -132,9 +144,6 @@ module.exports = {
     newPost,
     deletePost,
     updatePost,
-    deletePost,
-    allPosts,
-    findAllMasculine,
-    findAllFeminine,
-    findAllAndrogynous
+    findPostByStyle,
+    findLatestPost,
 }

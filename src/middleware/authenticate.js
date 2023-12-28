@@ -32,6 +32,25 @@ const authenticate = async (req, res, next) => {
 	}
 };
 
+const sameUser = async(req, res, next) => {
+	const siginUser = req.user.id
+	const postId = req.params.id
+
+	try {
+		const postOwner = await Post.findById(postId).populate('user')
+
+		if (postOwner.user._id.toString() !== siginUser) {
+			return res.status(403).json({
+				message: "You are not the owner of this post"
+			})
+		}
+		next()
+	} catch (e) {
+		console.log(e)
+	}
+}
+
 module.exports = {
-	authenticate
+	authenticate,
+	sameUser
 }
