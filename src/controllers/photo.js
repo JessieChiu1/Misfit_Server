@@ -26,30 +26,23 @@ const getOne = async(req, res) => {
 
 const uploadOne = async(req, res) => {
     try {
+        console.log(req)
         // upload to AWS s3
-        const photo_info = await s3Controller.uploadImage(req.file)
+        const photo_info = await s3Controller.uploadImageToS3(req.file)
 
         console.log(photo_info)
 
         const photoObject = {
             mainUrl: photo_info.Location,
-            mainKey: photo_info.key
+            mainKey: photo_info.Key
         }
 
         const newPhoto = await Photo.create(photoObject)
-
-        // need to update the Post's photo
-        if (newPhoto) {
-            await Post.findOneAndUpdate(
-                { users: req.user.id },
-                { $push: { photo: newPhoto._id }},
-            )
-        }
         
         await fs.unlinkSync(req.file.path)
 
         res.status(200).send({
-            id: newPhoto.id
+            id: newPhoto._id
         })
         
     } catch (e) {
@@ -75,7 +68,7 @@ const deleteOne = async(req, res) => {
         }
 
         //delete from S3
-        await s3Controller.deleteImage(photo.mainKey)
+        await s3Controller.deleteImageFromS3(photo.mainKey)
         res.status(204).send("deleted image")
     } catch (e) {
         console.log(e)

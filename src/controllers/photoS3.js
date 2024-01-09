@@ -1,4 +1,4 @@
-const { S3, PutObjectCommand, DeleteObjectCommand } = require("aws-sdk");
+const { S3 } = require("aws-sdk");
 require("dotenv").config()
 const fs = require("fs")
 const path = require("path")
@@ -14,7 +14,7 @@ const s3 = new S3({
     secretAccessKey
 })
 
-const uploadImage = async (file) => {
+const uploadImageToS3 = async (file) => {
     try {
         const fileStream = fs.createReadStream(file.path)
         const mainKey = path.basename(file.originalname, path.extname(file.originalname)) + '-' + Date.now() + path.extname(file.originalname);
@@ -34,7 +34,7 @@ const uploadImage = async (file) => {
     }
 }
 
-const deleteImage = async (fileKey) => {
+const deleteImageFromS3 = async (fileKey) => {
     try {
         const deleteParams = {
             Key: fileKey,
@@ -48,6 +48,6 @@ const deleteImage = async (fileKey) => {
 }
 
 module.exports = {
-    uploadImage,
-    deleteImage
+    uploadImageToS3,
+    deleteImageFromS3
 }

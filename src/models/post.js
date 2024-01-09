@@ -12,7 +12,7 @@ const postSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ["Coat/Jack", "Top", "Pant", "Skirt", "Accessory"],
+        enum: ["Outerwear", "Top", "Pant", "Skirt", "Accessory"],
         required: true
     },
     review: {

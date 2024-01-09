@@ -1,11 +1,11 @@
 const Post = require("../models/post")
 const User = require("../models/user")
-const s3Controller = require("./photoS3")
+const photoController = require("./photo")
 
 const findPost = async(req, res) => {
     try {
         id = req.params.id
-        const foundPost = await Post.findById(id)
+        const foundPost = await Post.findById(id).populate()
     
         if (!foundPost) {
             return res.status(404).json({
@@ -31,8 +31,10 @@ const newPost = async(req, res) => {
             review: req.body.review,
             style: req.body.style,
             like: 0,
-            price: req.body.price
+            price: req.body.price,
+            photo: [req.body.photoId]
         })
+        
         // need to add where we update the user schema
         if (newPost) {
             // also update the User's post array with new post ID
@@ -116,7 +118,7 @@ const updatePost = async(req, res) => {
 
 const findPostByStyle = async(req, res) => {
     try {
-        const allPosts = await Post.find({ style: req.query.style}).sort({ createdAt: -1 })
+        const allPosts = await Post.find({ style: req.query.style}).sort({ createdAt: -1 }).populate()
 
         return res.status(200).json(allPosts)
     } catch (e) {
@@ -128,7 +130,7 @@ const findPostByStyle = async(req, res) => {
 
 const findLatestPost = async(req, res) => {
     try {
-        const allPosts = await Post.find().sort({ createdAt: -1 }).limit(50)
+        const allPosts = await Post.find().sort({ createdAt: -1 }).limit(50).populate()
 
         return res.status(200).json(allPosts)
     } catch (e) {
