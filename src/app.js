@@ -17,7 +17,4 @@ app.use("/api/v1/user", require("./routes/user"))
 app.use("/api/v1/post", require("./routes/post"))
 app.use("/api/v1/photo", require("./routes/photo"))
 
-// home page route
-app.get("/", (req, res) => res.send("okay"));
-
 module.exports = app

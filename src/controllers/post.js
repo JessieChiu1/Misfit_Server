@@ -24,16 +24,8 @@ const findPost = async(req, res) => {
 
 const newPost = async(req, res) => {
     try{
-        const newPost = await Post.create({
-            user: req.user.id,
-            title: req.body.title,
-            type: req.body.type,
-            review: req.body.review,
-            style: req.body.style,
-            like: 0,
-            price: req.body.price,
-            photo: [req.body.photoId]
-        })
+        const payload = req.body
+        const newPost = await Post.create(payload)
         
         // need to add where we update the user schema
         if (newPost) {
@@ -116,21 +108,15 @@ const updatePost = async(req, res) => {
     }
 }
 
-const findPostByStyle = async(req, res) => {
-    try {
-        const allPosts = await Post.find({ style: req.query.style}).sort({ createdAt: -1 }).populate()
-
-        return res.status(200).json(allPosts)
-    } catch (e) {
-        return res.status(500).json({
-            message: `Internal Service Error. Please try again ${e}`
-        })
-    }
-}
-
 const findLatestPost = async(req, res) => {
     try {
-        const allPosts = await Post.find().sort({ createdAt: -1 }).limit(50).populate()
+        let allPosts
+        if (req.query.style) {
+            allPosts = await Post.find({ style: req.query.style }).sort({ createdAt: -1 }).populate("photo")
+
+        } else {
+            allPosts = await Post.find().sort({ createdAt: -1 }).limit(50).populate('photo')
+        }
 
         return res.status(200).json(allPosts)
     } catch (e) {
@@ -139,13 +125,11 @@ const findLatestPost = async(req, res) => {
         })
     }
 }
-
 
 module.exports = {
     findPost,
     newPost,
     deletePost,
     updatePost,
-    findPostByStyle,
     findLatestPost,
 }

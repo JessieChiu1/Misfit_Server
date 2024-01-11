@@ -39,7 +39,7 @@ const signUp = async (req, res) => {
 		// create token, and sign the token
 		const authToken = jwt.sign(payload, process.env.JWT_SECRET, {
 			algorithm: "HS256",
-			expiresIn: "6h",
+			expiresIn: "10d",
 		});
 
 		// Decode the token to retrieve iat and update the newUser's iat
@@ -99,7 +99,7 @@ const login = async (req, res) => {
 	
 		const authToken = jwt.sign(payload, process.env.JWT_SECRET, {
 			algorithm: "HS256",
-			expiresIn: "6h",
+			expiresIn: "10d",
 		})
 		// Decode the new token to retrieve iat
 		const decodedToken = jwt.verify(authToken, process.env.JWT_SECRET);
