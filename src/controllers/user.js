@@ -1,21 +1,30 @@
-const User = require("../models/user");
+const User = require("../models/user")
+const Post = require("../models/post")
 
-const getUser = async (req, res) => {
-    id = req.params.id
-    const foundUser = await User.findById(id)
+const getAllPostByUser = async(req, res) => {
+    const id = req.params.id;
 
-    // look up projection
-    if (!foundUser) {
+    try {
+      const foundUser = await User.findById(id).populate("post")
+  
+      if (!foundUser) {
         return res.status(404).json({
-            "message": "No such user found"
+          message: "No such user found",
         })
+      }
+  
+      // Now, for each post, populate the 'photo' field
+      const populatedPosts = await Post.populate(foundUser.post, { path: "photo" })
+  
+      return res.status(200).json(populatedPosts)
+    } catch (error) {
+      console.error("Error fetching posts:", error)
+      return res.status(500).json({
+        message: "Internal Server Error",
+      })
     }
-
-    return res.status(200).json({
-        username: foundUser.username
-    })
 }
 
 module.exports = {
-    getUser,
+    getAllPostByUser,
 }

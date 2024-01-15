@@ -112,12 +112,11 @@ const findLatestPost = async(req, res) => {
     try {
         let allPosts
         if (req.query.style) {
-            allPosts = await Post.find({ style: req.query.style }).sort({ createdAt: -1 }).populate("photo")
+            allPosts = await Post.find({ style: req.query.style }).sort({ createdAt: -1 }).populate("photo").populate("user")
 
         } else {
             allPosts = await Post.find().sort({ createdAt: -1 }).limit(50).populate('photo')
         }
-
         return res.status(200).json(allPosts)
     } catch (e) {
         return res.status(500).json({
