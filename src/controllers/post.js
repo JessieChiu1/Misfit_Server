@@ -5,7 +5,7 @@ const photoController = require("./photo")
 const findPost = async(req, res) => {
     try {
         id = req.params.id
-        const foundPost = await Post.findById(id).populate()
+        const foundPost = await Post.findById(id).populate("user", "username")
     
         if (!foundPost) {
             return res.status(404).json({
@@ -50,7 +50,6 @@ const newPost = async(req, res) => {
 
 const deletePost = async(req, res) => {
     try {
-        // delete post
         const deletedPost = await Post.findByIdAndDelete(req.params.id);
 
         if (!deletedPost) {
@@ -112,11 +111,33 @@ const findLatestPost = async(req, res) => {
     try {
         let allPosts
         if (req.query.style) {
-            allPosts = await Post.find({ style: req.query.style }).sort({ createdAt: -1 }).populate("photo").populate("user")
+            allPosts = await Post.find().sort({ createdAt: -1 }).populate("photo").populate("user", "username")
 
         } else {
             allPosts = await Post.find().sort({ createdAt: -1 }).limit(50).populate('photo')
         }
+        return res.status(200).json(allPosts)
+    } catch (e) {
+        return res.status(500).json({
+            message: `Internal Service Error. Please try again ${e}`
+        })
+    }
+}
+
+const findLatestPostByStyleAndFilter = async(req, res) => {
+    try {
+        let query = {}
+
+        query.style = req.params.style.charAt(0).toUpperCase() + req.params.style.slice(1)
+
+        if (req.query.type) {
+            query.type = req.query.type
+        }
+
+        console.log("query", query)
+
+        const allPosts = await Post.find(query).sort({ createdAt: -1 }).populate({ path: "photo" }).populate("user", "username")
+        console.log(allPosts)
         return res.status(200).json(allPosts)
     } catch (e) {
         return res.status(500).json({
@@ -131,4 +152,5 @@ module.exports = {
     deletePost,
     updatePost,
     findLatestPost,
+    findLatestPostByStyleAndFilter,
 }

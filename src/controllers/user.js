@@ -13,7 +13,6 @@ const getAllPostByUser = async(req, res) => {
         })
       }
   
-      // Now, for each post, populate the 'photo' field
       const populatedPosts = await Post.populate(foundUser.post, { path: "photo" })
   
       return res.status(200).json(populatedPosts)
@@ -27,4 +26,5 @@ const getAllPostByUser = async(req, res) => {
 
 module.exports = {
     getAllPostByUser,
+
 }

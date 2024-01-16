@@ -1,6 +1,5 @@
 const mongoose = require("mongoose")
 
-// create schema
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -19,8 +18,11 @@ const userSchema = new mongoose.Schema({
     iat: {
         type: Number,
         default: 0
-    }
+    },
+    likedPost: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+    }],
 })
 
-// export the schema
 module.exports = mongoose.model("User", userSchema);

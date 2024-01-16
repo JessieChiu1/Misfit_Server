@@ -12,6 +12,8 @@ router.delete("/:id", authMiddleware.authenticate, authMiddleware.sameUser, post
 
 router.put("/:id", authMiddleware.authenticate, authMiddleware.sameUser, postController.updatePost);
 
-router.get("/", postController.findLatestPost)
+router.get("/", postController.findLatestPost);
+
+router.get("/style/:style", postController.findLatestPostByStyleAndFilter)
 
 module.exports = router
