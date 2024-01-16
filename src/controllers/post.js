@@ -134,10 +134,8 @@ const findLatestPostByStyleAndFilter = async(req, res) => {
             query.type = req.query.type
         }
 
-        console.log("query", query)
-
         const allPosts = await Post.find(query).sort({ createdAt: -1 }).populate({ path: "photo" }).populate("user", "username")
-        console.log(allPosts)
+
         return res.status(200).json(allPosts)
     } catch (e) {
         return res.status(500).json({
