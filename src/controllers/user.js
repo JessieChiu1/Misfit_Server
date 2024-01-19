@@ -2,11 +2,11 @@ const User = require("../models/user")
 const Post = require("../models/post")
 
 const getAllPostByUser = async(req, res) => {
-    const id = req.params.id;
+    const id = req.params.id
 
     try {
       const foundUser = await User.findById(id).populate("post")
-  
+
       if (!foundUser) {
         return res.status(404).json({
           message: "No such user found",

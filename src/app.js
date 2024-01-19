@@ -1,13 +1,14 @@
-const express = require("express");
+const express = require("express")
 
 const app = express();
 
 app.use((req, res, next) => {
-	res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-	res.header('Access-Control-Allow-Methods', 'POST, GET')
-	res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-	next()
-  });
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
+    res.header('Access-Control-Allow-Methods', 'POST, GET, DELETE, PUT')
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    next();
+});
+
   
 
 app.use(express.json());

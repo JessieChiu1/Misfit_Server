@@ -1,6 +1,7 @@
 const Post = require("../models/post")
 const User = require("../models/user")
-const photoController = require("./photo")
+const Photo = require("../models/photo")
+const s3Controller = require("./photoS3")
 
 const findPost = async(req, res) => {
     try {
@@ -50,30 +51,30 @@ const newPost = async(req, res) => {
 
 const deletePost = async(req, res) => {
     try {
-        const deletedPost = await Post.findByIdAndDelete(req.params.id);
+        const deletedPost = await Post.findByIdAndDelete(req.params.postId);
 
         if (!deletedPost) {
             return res.status(404).send("Post not found")
         }
 
-        const photoIds = deletedPost.photo.map(photo => photo.id)
+        const photoIds = deletedPost.photo.map(photo => photo._id)
 
         for (const photoId of photoIds) {
             const photo = await Photo.findByIdAndDelete(photoId).lean()
             if (photo) {
-                await s3.Controller.deleteImage(photo.mainKey)
+                await s3Controller.deleteImageFromS3(photo.mainKey)
             }
         }
 
         // remove the deleted post from User's post array
         await User.findByIdAndUpdate(
             req.user.id,
-            { $pull: { post: req.params.id } },
-        );
+            { $pull: { post: req.params.postId } },
+        )
 
         return res.status(200).json({ message: 'Deleted Post' });
     } catch(e) {
-        console.log(e)
+        console.log("deletePost", e)
         return res.status(500).json({
             message: `Internal Service Error. Please try again. ${e}`
         })

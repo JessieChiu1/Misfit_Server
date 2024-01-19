@@ -1,5 +1,6 @@
-const User = require("../models/user");
-const jwt = require("jsonwebtoken");
+const User = require("../models/user")
+const jwt = require("jsonwebtoken")
+const Post = require("../models/post")
 // authenticate
 // still need to add a check where the we compare if the token belongs to the user?
 
@@ -20,12 +21,11 @@ const authenticate = async (req, res, next) => {
   
 	  // add a check to see if the token matches with the user in DB
 	  if (user && user.iat === tokenInfo.iat) {
-		req.user = tokenInfo;
-		// next() -> tell express to trigger the next middleware
-		next();
+		req.user = tokenInfo
+		next()
 	  }
 	} catch (e) {
-	  console.log(e);
+	  console.log("authenticate", e);
 	  return res.status(401).json({
 		message: "unauthorized",
 	  });
@@ -34,7 +34,7 @@ const authenticate = async (req, res, next) => {
 
 const sameUser = async(req, res, next) => {
 	const siginUser = req.user.id
-	const postId = req.params.id
+	const postId = req.params.postId
 
 	try {
 		const postOwner = await Post.findById(postId).populate('user')
@@ -46,7 +46,7 @@ const sameUser = async(req, res, next) => {
 		}
 		next()
 	} catch (e) {
-		console.log(e)
+		console.log("sameUser", e)
 	}
 }
 
