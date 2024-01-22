@@ -26,11 +26,8 @@ const getOne = async(req, res) => {
 
 const uploadOne = async(req, res) => {
     try {
-        console.log(req)
         // upload to AWS s3
         const photo_info = await s3Controller.uploadImageToS3(req.file)
-
-        console.log(photo_info)
 
         const photoObject = {
             mainUrl: photo_info.Location,

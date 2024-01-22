@@ -18,7 +18,6 @@ const uploadImageToS3 = async (file) => {
     try {
         const fileStream = fs.createReadStream(file.path)
         const mainKey = path.basename(file.originalname, path.extname(file.originalname)) + '-' + Date.now() + path.extname(file.originalname);
-        console.log(mainKey)
     
         const uploadParams = {
             Bucket: bucketName,

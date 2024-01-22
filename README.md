@@ -31,39 +31,47 @@ This will be in your `.gitignore`
     - add this string to your `.env` file
 
 ## File structures and file you will need to create
-- `__test__` jest testing folder
-    - `__snapshot__`
-        - `app.test.js.snap` - app.js snapshot output
-    - `controllers` 
-        - `__snapshot__` - controllers function snapshot
-            - `auth.test.js.snap`
-            - `post.test.js.snap`
-            - `user.test.js.snap`
-        - `auth.test.js` 
-        - `post.test.js`
-        - `user.test.js`
-    - `app.test.js`
-- `coverage` - folder containing the jest coverage summary - meaning how much of the code did we test
-- `src` 
-    - `config` database connection configuration
-        - `db.js` mongodb connection file
-    - `controllers` all api call functions are store here
-        - `auth.js`
-        - `post.js`
-        - `user.js`
-    - `middleware` all middleware
-        - `authenticate.js`
-    - `models` - schema
-        - `post.js`
-        - `user.js`
-    - `routes` routing from express and redirect to controllers functions
-        - `auth.js`
-        - `post.js`
-        - `user.js`
-    - `app.js` express and middleware
-    - `server.js` entry point that activate the mongodb connection promise in `config/db.js`
-- `.env`
-- `.gitignore`
+
+    __test__                    # jest testing folder
+    ├── __snapshot__
+    │   └── app.test.js.snap    # app.js snapshot output
+    ├── controllers
+    │   ├── __snapshot__        # controllers function snapshot
+    │   │   ├── auth.test.js.snap
+    │   │   ├── post.test.js.snap
+    │   │   └── user.test.js.snap
+    │   ├── auth.test.js
+    │   ├── post.test.js
+    │   └── user.test.js
+    └── app.test.js
+    coverage                    # folder containing the jest coverage summary - meaning how much of the code did we test
+
+    src
+    ├── config                  # database connection configuration
+    │   └── db.js               # mongodb connection file
+    ├── controllers             # all API call functions are stored here
+    │   ├── auth.js
+        └── photo.js               
+        └── photoS3.js          # controllers function to interact with AWS S3 bucket
+    │   ├── post.js
+    │   └── user.js
+    ├── middleware              # all middleware
+    │   └── authenticate.js
+    ├── models                  # schema
+    │   ├── post.js
+    │   └── user.js
+    ├── routes                  # routing from express and redirection to controllers functions
+    │   ├── auth.js
+    │   ├── photo.js
+        ├── post.js
+    │   └── user.js
+    ├── app.js                  # express and middleware
+    └── server.js               # entry point that activates the MongoDB connection promise in `config/db.js`
+
+    .env
+    .gitignore
+
+
 
 ## libraries and what they are
 - `express` - framework for the Node.js backend. (Middleware, Routing, loading static files, error handling)
@@ -79,6 +87,7 @@ This will be in your `.gitignore`
 - `supertest` - will help test end-point 
 - `jest` - test overall functionality
 - `mongodb-memory-server` - to establish a empty mongodb shell for testing
+- `aws-sdk` - to interact with AWS S3 storage
 
 ```
 npm install express
@@ -88,6 +97,7 @@ npm install jsonwebtoken
 npm install supertest --save-dev
 npm install --save-dev jest
 npm install mongodb-memory-server --save-dev
+npm install aws-sdk
 ```
 
 ## Running the files:
@@ -97,3 +107,23 @@ You should see something like this:
     listening
     connected to MongoDB @ac-nr0bkff-shard-00-01.awn8gnn.mongodb.net
     ```
+
+## TODOs
+- need to refactor the routes and controllers function:
+    - I built the backend code before thinking deeply about what I want my frontend to be able to do so I created routes/controllers function based on what I think I need. As I flesh out the backend, I will need to rewrite the backend code.
+        - **controller for incrementing likes**
+        - **photo S3 PUT functionality**
+- flesh out schemas
+    - same issue: I create the schema without thinking too much about features. As I get a better sense of what featuers I want to include I will need to rewrite the schema
+        - **Tags**
+        - **Better organize what type I need in post schema**
+        - **user profile picture?**
+        - **rewrite authenticate with OAuth with Gmail and add email field in user schema** 
+            - **use email to sign in instead of username**
+ - rewrite Jest file
+    - same issue: I have since edited the controller functions so I should rewrite the Jest test cases also
+- **Future**
+    - **figure out a queuing system to handle a lot of requests to a single endpoint**
+    - **figure out how to add a cooldown period to prevent DDOS attack**
+    - **figure out optimazation as I go**
+    - **figure out how to make my backend more secure**       

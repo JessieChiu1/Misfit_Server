@@ -13,7 +13,7 @@ const postSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ["Activewear", "Coats", "Jackets & Blazers", "Suits & Separates", "Dresses", "Jeans & Denim", "Loungewear", "Pants & Leggings", "Skirts", "Sleepwear", "Sweaters", "Sweatshirts & Hoodies", "Swimsuits & Cover-Ups", "T-Shirt and Tops", "Shoes", "Accessory", "Outfit Showcase", "Underwear", "Bra", "Shorts", "Swimwear", "Dress Shirt", "Blouses", "Jumpsuits & Rompers"],
+        enum: ["Activewear", "Coats", "Jackets & Blazers", "Suits & Separates", "Dresses", "Jeans & Denim", "Loungewear", "Pants & Leggings", "Skirts", "Sleepwear", "Sweaters", "Sweatshirts & Hoodies", "T-Shirt", "Shoes", "Accessory", "Outfit Showcase", "Underwear", "Bra", "Shorts", "Swimwear", "Dress Shirt", "Blouses", "Dress Pants"],
         required: true
     },
     review: {
