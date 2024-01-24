@@ -6,7 +6,7 @@ const s3Controller = require("./photoS3")
 const findPost = async(req, res) => {
     try {
         id = req.params.id
-        const foundPost = await Post.findById(id).populate("user", "username")
+        const foundPost = await Post.findById(id).populate("user", "username").populate("photo")
     
         if (!foundPost) {
             return res.status(404).json({
@@ -115,7 +115,7 @@ const findLatestPost = async(req, res) => {
             allPosts = await Post.find().sort({ createdAt: -1 }).populate("photo").populate("user", "username")
 
         } else {
-            allPosts = await Post.find().sort({ createdAt: -1 }).limit(50).populate('photo')
+            allPosts = await Post.find().sort({ createdAt: -1 }).limit(50).populate('photo').populate("user", "username")
         }
         return res.status(200).json(allPosts)
     } catch (e) {
@@ -135,7 +135,7 @@ const findLatestPostByStyleAndFilter = async(req, res) => {
             query.type = req.query.type
         }
 
-        const allPosts = await Post.find(query).sort({ createdAt: -1 }).populate({ path: "photo" }).populate("user", "username")
+        const allPosts = await Post.find(query).sort({ createdAt: -1 }).populate({ path: "photo" }).populate("user", "username").populate("like")
 
         return res.status(200).json(allPosts)
     } catch (e) {
@@ -145,6 +145,57 @@ const findLatestPostByStyleAndFilter = async(req, res) => {
     }
 }
 
+const updateLikedPost = async (req, res) => {
+    try {
+        const foundUser = await User.findById(req.params.userId)
+        const postId = req.params.postId
+
+        const post = await Post.findById(postId)
+        if (post.like.includes(foundUser._id)) {
+            return res.status(200).json({
+                message: "Post already liked by the user",
+            })
+        }
+
+        await Post.findByIdAndUpdate(
+            postId,
+            { $push: { like: foundUser._id } },
+        )
+
+        return res.status(200).json({
+            message: "Post liked successfully",
+        })
+
+    } catch (e) {
+        return res.status(500).json({
+            message: `Internal Service Error. Please try again ${e}`,
+        })
+    }
+}
+
+
+const updateUnlikedPost = async(req, res) => {
+    console.log("triggering backend unlike post function");
+    try {
+        const foundUser = await User.findById(req.params.userId);
+
+        await Post.findByIdAndUpdate(
+            req.params.postId,
+            { $pull: { like: foundUser._id } },
+        );
+
+        return res.status(200).json({
+            message: "Post unliked successfully"
+        });
+
+    } catch (e) {
+        return res.status(500).json({
+            message: `Internal Service Error. Please try again ${e}`
+        });
+    }
+};
+
+
 module.exports = {
     findPost,
     newPost,
@@ -152,4 +203,6 @@ module.exports = {
     updatePost,
     findLatestPost,
     findLatestPostByStyleAndFilter,
+    updateLikedPost,
+    updateUnlikedPost
 }

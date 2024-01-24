@@ -16,4 +16,8 @@ router.get("/", postController.findLatestPost);
 
 router.get("/style/:style", postController.findLatestPostByStyleAndFilter)
 
+router.put("/:postId/:userId/like", authMiddleware.authenticate, postController.updateLikedPost)
+
+router.put("/:postId/:userId/unlike", authMiddleware.authenticate, postController.updateUnlikedPost)
+
 module.exports = router

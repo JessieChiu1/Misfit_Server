@@ -25,10 +25,11 @@ const postSchema = new mongoose.Schema({
         enum: ["Masculine", "Feminine", "Androgynous"],
         required: true
     },
-    like: {
-        type: Number,
-        default: 0,
-    },
+    like: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        unique: true,
+    }],
     price: {
         type: Number,
     },
@@ -38,5 +39,4 @@ const postSchema = new mongoose.Schema({
     }]
 })
 
-// export the schema
 module.exports = mongoose.model("Post", postSchema);
