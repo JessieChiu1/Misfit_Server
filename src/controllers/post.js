@@ -175,23 +175,22 @@ const updateLikedPost = async (req, res) => {
 
 
 const updateUnlikedPost = async(req, res) => {
-    console.log("triggering backend unlike post function");
     try {
-        const foundUser = await User.findById(req.params.userId);
+        const foundUser = await User.findById(req.params.userId)
 
         await Post.findByIdAndUpdate(
             req.params.postId,
             { $pull: { like: foundUser._id } },
-        );
+        )
 
         return res.status(200).json({
             message: "Post unliked successfully"
-        });
+        })
 
     } catch (e) {
         return res.status(500).json({
             message: `Internal Service Error. Please try again ${e}`
-        });
+        })
     }
 };
 
