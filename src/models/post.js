@@ -28,7 +28,6 @@ const postSchema = new mongoose.Schema({
     like: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        unique: true,
     }],
     price: {
         type: Number,

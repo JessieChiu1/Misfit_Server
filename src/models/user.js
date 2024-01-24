@@ -19,10 +19,6 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    likedPost: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Post",
-    }],
 })
 
 module.exports = mongoose.model("User", userSchema);
