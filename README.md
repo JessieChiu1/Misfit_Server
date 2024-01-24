@@ -5,10 +5,15 @@ Your `.env` file should look something like this:
 ```
 DB_URI=<MongoDB URI String with "/dev">
 JWT_SECRET=<Some secret key use to hash your password>
+AWS_BUCKET_NAME=
+AWS_BUCKET_REGION=
+AWS_ACCESS_KEY=
+AWS_SECRET_KEY=
 ```
 
 - You will get `DB_URI` from setting up your MongoDB Atlas
 - `JWT_SECRET` is just a random string, you can put anything here 
+- `AWS_BUCKET_NAME`/`AWS_BUCKET_REGION`/`AWS_ACCESS_KEY`/`AWS_SECRET_KEY` take info taken from the AWS S3 page
 
 This will be in your `.gitignore`
 ```
