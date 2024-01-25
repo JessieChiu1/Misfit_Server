@@ -116,7 +116,6 @@ You should see something like this:
 ## TODOs
 - need to refactor the routes and controllers function:
     - I built the backend code before thinking deeply about what I want my frontend to be able to do so I created routes/controllers function based on what I think I need. As I flesh out the backend, I will need to rewrite the backend code.
-        - **photo S3 PUT functionality**
 - flesh out schemas
     - same issue: I create the schema without thinking too much about features. As I get a better sense of what featuers I want to include I will need to rewrite the schema
         - **Tags**

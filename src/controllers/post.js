@@ -81,32 +81,44 @@ const deletePost = async(req, res) => {
     }
 }
 
-const updatePost = async(req, res) => {
+const updatePost = async (req, res) => {
     try {
-        const updateFields = {};
-        const { title, type, review, style, price } = req.body;
+        const foundPost = await Post.findById(req.params.postId);
+        const foundPostPhoto = await Photo.findById(foundPost.photo[0]._id)
 
-        if (title) updateFields.title = title;
-        if (type) updateFields.type = type;
-        if (review) updateFields.review = review;
-        if (style) updateFields.style = style;
-        if (price) updateFields.price = price;
+        const updateFields = {}
+        const { title, type, review, style, price, photo } = req.body
 
-        const updatedPost = await Post.findOneAndUpdate(
-            {_id: req.params.id},
+        if (title) updateFields.title = title
+        if (type) updateFields.type = type
+        if (review) updateFields.review = review
+        if (style) updateFields.style = style
+        if (price) updateFields.price = price
+
+        if (photo) {
+            await s3Controller.deleteImageFromS3(foundPostPhoto.mainKey)
+            updateFields.photo = photo
+        }
+
+        console.log(`updatedField`, updateFields);
+
+        const updatedPost = await Post.findByIdAndUpdate(
+            req.params.postId,
             { $set: updateFields },
-            { new: true },
-        )
-        
-        return res.status(200).json(updatedPost)
 
-    } catch(e) {
+        )
+
+        console.log("updatedPost", updatedPost)
+
+        return res.status(200).json({ message: "Post Updated successfully"})
+    } catch (e) {
         console.log(e)
         return res.status(500).json({
-            message: `Internal Service Error. Please try again ${e}`
-        })
+            message: `Internal Service Error. Please try again ${e}`,
+        });
     }
-}
+};
+
 
 const findLatestPost = async(req, res) => {
     try {
