@@ -124,10 +124,10 @@ const findLatestPost = async(req, res) => {
     try {
         let allPosts
         if (req.query.style) {
-            allPosts = await Post.find().sort({ createdAt: -1 }).populate("photo").populate("user", "username")
+            allPosts = await Post.find().sort({ createdAt: -1 }).limit(500).populate("photo").populate("user", "username")
 
         } else {
-            allPosts = await Post.find().sort({ createdAt: -1 }).limit(50).populate('photo').populate("user", "username")
+            allPosts = await Post.find().sort({ createdAt: -1 }).limit(500).populate('photo').populate("user", "username")
         }
         return res.status(200).json(allPosts)
     } catch (e) {
@@ -147,7 +147,7 @@ const findLatestPostByStyleAndFilter = async(req, res) => {
             query.type = req.query.type
         }
 
-        const allPosts = await Post.find(query).sort({ createdAt: -1 }).populate({ path: "photo" }).populate("user", "username").populate("like")
+        const allPosts = await Post.find(query).sort({ createdAt: -1 }).limit(500).populate("photo").populate("user", "username")
 
         return res.status(200).json(allPosts)
     } catch (e) {
