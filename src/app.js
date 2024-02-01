@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3001
 // connect to MongoDB function
 const connectDB = async () => {
     try {
-      const conn = await mongoose.connect(process.env.TEST_DB_URI);
+      const conn = await mongoose.connect(process.env.TEST_DB_URI)
       console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
       console.log(error)
@@ -19,10 +19,11 @@ const connectDB = async () => {
 }
 
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
+    const allowedOrigin = process.env.API_URL || 'http://localhost:3000'
+    res.header('Access-Control-Allow-Origin', allowedOrigin)
     res.header('Access-Control-Allow-Methods', 'POST, GET, DELETE, PUT')
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-    next();
+    next()
 });
 
   
