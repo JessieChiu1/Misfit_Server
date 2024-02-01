@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "updateSnapshot": "jest --updateSnapshot",
-    "start": "node src/server.js"
+    "start": "node src/app.js"
   },
   "author": "",
   "license": "ISC",
