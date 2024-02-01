@@ -1,8 +1,18 @@
-const app = require("./app");
-const dbConnectionPromise = require("./config/db");
+const app = require('./app');
+const dbConnectionPromise = require('./config/db');
 
-dbConnectionPromise.then(() => {
-	app.listen((PORT = 3001), () => {
-		console.log(`listing to PORT ${PORT}`);
-	});
-})
+const startServer = async () => {
+  try {
+    await dbConnectionPromise;
+
+    const PORT = process.env.PORT || 3001;
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start the server:', error);
+    process.exit(1)
+  }
+};
+
+startServer()
