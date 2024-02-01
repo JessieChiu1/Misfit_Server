@@ -1,6 +1,5 @@
 const { S3 } = require("aws-sdk");
 require("dotenv").config()
-const fs = require("fs")
 const path = require("path")
 
 const bucketName = process.env.AWS_BUCKET_NAME
@@ -16,12 +15,11 @@ const s3 = new S3({
 
 const uploadImageToS3 = async (file) => {
     try {
-        const fileStream = fs.createReadStream(file.path)
-        const mainKey = path.basename(file.originalname, path.extname(file.originalname)) + '-' + Date.now() + path.extname(file.originalname);
+        const mainKey = `${file.originalname}-${Date.now()}`
     
         const uploadParams = {
             Bucket: bucketName,
-            Body: fileStream,
+            Body: file.buffer,
             Key: mainKey
         }
     

@@ -1,7 +1,6 @@
 const s3Controller = require("./photoS3")
 const Photo = require("../models/photo")
 const Post = require("../models/post")
-const fs = require("fs")
 
 const getAllImage = async(req, res) => {
     try {
@@ -35,8 +34,6 @@ const uploadOne = async(req, res) => {
         }
 
         const newPhoto = await Photo.create(photoObject)
-        
-        await fs.unlinkSync(req.file.path)
 
         res.status(200).send({
             id: newPhoto._id
