@@ -1,16 +1,18 @@
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+const mongoose = require("mongoose")
+const dotenv = require("dotenv")
 
-dotenv.config();
-// create the db
-const db = mongoose.connection;
+dotenv.config()
 
-// connect the db
+const db = mongoose.connection
+
 db.on("connected", () => {
-    console.log("connected to MongoDB @" + db.host);
-});
+    console.log("Connected to MongoDB @" + db.host);
+})
 
-module.exports = mongoose.connect(process.env.TEST_DB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+// Export a function that returns the promise of the database connection
+module.exports = () => {
+    return mongoose.connect(process.env.TEST_DB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+}
