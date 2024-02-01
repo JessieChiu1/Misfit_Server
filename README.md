@@ -52,8 +52,6 @@ This will be in your `.gitignore`
     coverage                    # folder containing the jest coverage summary - meaning how much of the code did we test
 
     src
-    ├── config                  # database connection configuration
-    │   └── db.js               # mongodb connection file
     ├── controllers             # all API call functions are stored here
     │   ├── auth.js
         └── photo.js               
@@ -70,8 +68,8 @@ This will be in your `.gitignore`
     │   ├── photo.js
         ├── post.js
     │   └── user.js
-    ├── app.js                  # express and middleware
-    └── server.js               # entry point that activates the MongoDB connection promise in `config/db.js`
+    └── app.js                  # entry point, DB and express setup
+
 
     .env
     .gitignore
