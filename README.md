@@ -1,5 +1,7 @@
 # Misfit Server
 
+The server is hosted on Cyclic and will automatically redeploy when it detect changes to main.
+
 ## Setting up .env file 
 Your `.env` file should look something like this:
 ```
@@ -101,6 +103,7 @@ npm install supertest --save-dev
 npm install --save-dev jest
 npm install mongodb-memory-server --save-dev
 npm install aws-sdk
+npm install multer
 ```
 
 ## Running the files:
@@ -108,14 +111,14 @@ npm install aws-sdk
 You should see something like this:
     ```
     listening
-    connected to MongoDB @ac-nr0bkff-shard-00-01.awn8gnn.mongodb.net
+    connected to MongoDB @{some string.net}
     ```
 
 ## TODOs
 - need to refactor the routes and controllers function:
     - I built the backend code before thinking deeply about what I want my frontend to be able to do so I created routes/controllers function based on what I think I need. As I flesh out the backend, I will need to rewrite the backend code.
 - flesh out schemas
-    - same issue: I create the schema without thinking too much about features. As I get a better sense of what featuers I want to include I will need to rewrite the schema
+    - same issue: I create the schema without thinking too much about features. As I get a better sense of what features I want to include I will need to rewrite the schema
         - **Tags**
         - **Better organize what type I need in post schema**
         - **user profile picture?**

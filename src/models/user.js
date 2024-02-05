@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    comment: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+    }
 })
 
 module.exports = mongoose.model("User", userSchema);

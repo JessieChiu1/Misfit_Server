@@ -20,4 +20,6 @@ router.put("/:postId/:userId/like", authMiddleware.authenticate, postController.
 
 router.put("/:postId/:userId/unlike", authMiddleware.authenticate, postController.updateUnlikedPost)
 
+router.get("/comment/:postId", postController.findRootCommentByPostId)
+
 module.exports = router

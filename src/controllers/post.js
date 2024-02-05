@@ -1,6 +1,7 @@
 const Post = require("../models/post")
 const User = require("../models/user")
 const Photo = require("../models/photo")
+const Comment = require("../models/comment")
 const s3Controller = require("./photoS3")
 
 const findPost = async(req, res) => {
@@ -100,15 +101,11 @@ const updatePost = async (req, res) => {
             updateFields.photo = photo
         }
 
-        console.log(`updatedField`, updateFields);
-
         const updatedPost = await Post.findByIdAndUpdate(
             req.params.postId,
             { $set: updateFields },
 
         )
-
-        console.log("updatedPost", updatedPost)
 
         return res.status(200).json({ message: "Post Updated successfully"})
     } catch (e) {
@@ -204,7 +201,25 @@ const updateUnlikedPost = async(req, res) => {
             message: `Internal Service Error. Please try again ${e}`
         })
     }
-};
+}
+
+const findRootCommentByPostId = async(req, res) => {
+    try{
+        const postId = req.params.postId
+        const foundPost = await Post.findById(postId).populate('comment')
+
+        const populatedComment = await Comment.populate(foundPost.comment, {
+            path: 'user',
+            select: 'username',
+        })
+    
+        return res.status(200).json(populatedComment)
+    } catch (e) {
+        return res.status(500).json({
+            message: `Internal Service Error. Please try again ${e}`
+        })
+    }
+}
 
 
 module.exports = {
@@ -215,5 +230,6 @@ module.exports = {
     findLatestPost,
     findLatestPostByStyleAndFilter,
     updateLikedPost,
-    updateUnlikedPost
+    updateUnlikedPost,
+    findRootCommentByPostId
 }

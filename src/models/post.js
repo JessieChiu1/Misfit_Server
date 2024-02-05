@@ -1,6 +1,5 @@
 const mongoose = require("mongoose")
 
-// create schema
 const postSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -35,7 +34,16 @@ const postSchema = new mongoose.Schema({
     photo: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Photo"
-    }]
+    }],
+    comment: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+        default: []
+    }],
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
 })
 
-module.exports = mongoose.model("Post", postSchema);
+module.exports = mongoose.model("Post", postSchema)

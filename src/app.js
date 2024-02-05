@@ -21,10 +21,10 @@ const connectDB = async () => {
 app.use((req, res, next) => {
     const allowedOrigin = process.env.API_URL || 'http://localhost:3000'
     res.header('Access-Control-Allow-Origin', allowedOrigin)
-    res.header('Access-Control-Allow-Methods', 'POST, GET, DELETE, PUT')
+    res.header('Access-Control-Allow-Methods', 'POST, GET, DELETE, PUT, OPTIONS')
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
     next()
-});
+})
 
   
 app.use(express.json());
@@ -33,6 +33,7 @@ app.use("/api/v1/auth", require("./routes/auth"))
 app.use("/api/v1/user", require("./routes/user"))
 app.use("/api/v1/post", require("./routes/post"))
 app.use("/api/v1/photo", require("./routes/photo"))
+app.use("/api/v1/comment", require("./routes/comment"))
 
 //Connect to the database before listening to avoid cyclic error
 connectDB().then(() => {
