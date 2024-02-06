@@ -58,13 +58,15 @@ const deletePost = async(req, res) => {
             return res.status(404).send("Post not found")
         }
 
-        const photoIds = deletedPost.photo.map(photo => photo._id)
-
-        for (const photoId of photoIds) {
-            const photo = await Photo.findByIdAndDelete(photoId).lean()
+        for (const photoId of deletedPost.photo) {
+            const photo = await Photo.findByIdAndDelete(photoId)
             if (photo) {
                 await s3Controller.deleteImageFromS3(photo.mainKey)
             }
+        }
+
+        for (const commentId of deletedPost.comment) {
+            await Comment.findByIdAndDelete(commentId)
         }
 
         // remove the deleted post from User's post array
@@ -72,6 +74,7 @@ const deletePost = async(req, res) => {
             req.user.id,
             { $pull: { post: req.params.postId } },
         )
+
 
         return res.status(200).json({ message: 'Deleted Post' });
     } catch(e) {
