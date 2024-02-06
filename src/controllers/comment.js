@@ -29,6 +29,52 @@ const createRootComment = async(req, res) => {
     }
 }
 
+const upvoteComment = async(req, res) => {
+    try {
+        const commentId = req.params.commentId
+        const foundUser = await User.findById(req.params.userId)
+
+        await Comment.findByIdAndUpdate(
+            commentId,
+            {
+                $push: { upvote: foundUser._id },
+                $pull: { downvote: foundUser._id }
+            }
+        )
+
+        res.status(200).json({
+            message: "Comment upvoted successfully",
+        })
+
+    } catch(e) {
+        console.log(`Internal Service Error: Please try again: ${e}`)
+    }
+}
+
+const downvoteComment = async(req, res) => {
+    try {
+        const commentId = req.params.commentId
+        const foundUser = await User.findById(req.params.userId)
+
+        await Comment.findByIdAndUpdate(
+            commentId,
+            {
+                $pull: { upvote: foundUser._id },
+                $push: { downvote: foundUser._id }
+            }
+        )
+
+        res.status(200).json({
+            message: "Comment downvoted successfully",
+        })
+
+    } catch(e) {
+        console.log(`Internal Service Error: Please try again: ${e}`)
+    }
+}
+
 module.exports = {
-    createRootComment
+    createRootComment,
+    upvoteComment,
+    downvoteComment
 }
