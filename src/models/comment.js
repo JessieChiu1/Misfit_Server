@@ -10,6 +10,10 @@ const commentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    rightToDelete: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    }],
     parent: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Comment" || "Post",

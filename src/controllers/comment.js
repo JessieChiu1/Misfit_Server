@@ -32,7 +32,7 @@ const createRootComment = async(req, res) => {
 const upvoteComment = async(req, res) => {
     try {
         const commentId = req.params.commentId
-        const foundUser = await User.findById(req.params.userId)
+        const foundUser = await User.findById(req.user.id)
 
         await Comment.findByIdAndUpdate(
             commentId,
@@ -54,7 +54,7 @@ const upvoteComment = async(req, res) => {
 const downvoteComment = async(req, res) => {
     try {
         const commentId = req.params.commentId
-        const foundUser = await User.findById(req.params.userId)
+        const foundUser = await User.findById(req.user.id)
 
         await Comment.findByIdAndUpdate(
             commentId,
@@ -73,8 +73,34 @@ const downvoteComment = async(req, res) => {
     }
 }
 
+const deleteComment = async (req, res) => {
+    try {
+        const userId = req.user.id
+
+        const foundComment = await Comment.findById(req.params.commentId)
+
+        console.log(foundComment.rightToDelete.map(id => id.toString()).includes(userId))
+
+        if (foundComment.rightToDelete.map(id => id.toString()).includes(userId)) {
+            await Comment.findByIdAndDelete(req.params.commentId)
+            return res.status(200).json({
+                message: "Comment deleted successfully"
+            })
+        } else {
+            return res.status(403).json({
+                message: "User is not authorized to delete this comment"
+            })
+        }
+    } catch (e) {
+        console.log(`Internal Service Error: Please try again: ${e}`)
+    }
+}
+
+
+
 module.exports = {
     createRootComment,
     upvoteComment,
-    downvoteComment
+    downvoteComment,
+    deleteComment
 }
