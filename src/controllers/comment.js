@@ -37,10 +37,10 @@ const upvoteComment = async(req, res) => {
         await Comment.findByIdAndUpdate(
             commentId,
             {
-                $push: { upvote: foundUser._id },
+                $addToSet: { upvote: foundUser._id },
                 $pull: { downvote: foundUser._id }
             }
-        )
+        );
 
         res.status(200).json({
             message: "Comment upvoted successfully",
@@ -60,9 +60,9 @@ const downvoteComment = async(req, res) => {
             commentId,
             {
                 $pull: { upvote: foundUser._id },
-                $push: { downvote: foundUser._id }
+                $addToSet: { downvote: foundUser._id }
             }
-        )
+        );
 
         res.status(200).json({
             message: "Comment downvoted successfully",
