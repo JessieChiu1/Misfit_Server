@@ -79,8 +79,6 @@ const deleteComment = async (req, res) => {
 
         const foundComment = await Comment.findById(req.params.commentId)
 
-        console.log(foundComment.rightToDelete.map(id => id.toString()).includes(userId))
-
         if (foundComment.rightToDelete.map(id => id.toString()).includes(userId)) {
             await Comment.findByIdAndDelete(req.params.commentId)
             return res.status(200).json({

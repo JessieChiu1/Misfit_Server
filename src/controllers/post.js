@@ -78,7 +78,6 @@ const deletePost = async(req, res) => {
 
         return res.status(200).json({ message: 'Deleted Post' });
     } catch(e) {
-        console.log("deletePost", e)
         return res.status(500).json({
             message: `Internal Service Error. Please try again. ${e}`
         })
@@ -159,7 +158,7 @@ const findLatestPostByStyleAndFilter = async(req, res) => {
 
 const updateLikedPost = async (req, res) => {
     try {
-        const foundUser = await User.findById(req.params.userId)
+        const foundUser = await User.findById(req.user.id)
         const postId = req.params.postId
 
         const post = await Post.findById(postId)
@@ -188,7 +187,7 @@ const updateLikedPost = async (req, res) => {
 
 const updateUnlikedPost = async(req, res) => {
     try {
-        const foundUser = await User.findById(req.params.userId)
+        const foundUser = await User.findById(req.user.id)
 
         await Post.findByIdAndUpdate(
             req.params.postId,

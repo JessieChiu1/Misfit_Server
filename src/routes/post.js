@@ -16,9 +16,9 @@ router.get("/", postController.findLatestPost)
 
 router.get("/style/:style", postController.findLatestPostByStyleAndFilter)
 
-router.put("/:postId/:userId/like", authMiddleware.authenticate, postController.updateLikedPost)
+router.put("/:postId/like", authMiddleware.authenticate, postController.updateLikedPost)
 
-router.put("/:postId/:userId/unlike", authMiddleware.authenticate, postController.updateUnlikedPost)
+router.put("/:postId/unlike", authMiddleware.authenticate, postController.updateUnlikedPost)
 
 router.get("/comment/:postId", postController.findRootCommentByPostId)
 

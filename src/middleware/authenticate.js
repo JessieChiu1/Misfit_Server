@@ -28,9 +28,9 @@ const authenticate = async (req, res, next) => {
 	  console.log("authenticate", e);
 	  return res.status(401).json({
 		message: "unauthorized",
-	  });
+	  })
 	}
-};
+}
 
 const sameUser = async(req, res, next) => {
 	const siginUser = req.user.id
