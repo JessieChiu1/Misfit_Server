@@ -93,18 +93,7 @@ This will be in your `.gitignore`
 - `jest` - test overall functionality
 - `mongodb-memory-server` - to establish a empty mongodb shell for testing
 - `aws-sdk` - to interact with AWS S3 storage
-
-```
-npm install express
-npm install dotenv
-npm install bcrypt
-npm install jsonwebtoken
-npm install supertest --save-dev
-npm install --save-dev jest
-npm install mongodb-memory-server --save-dev
-npm install aws-sdk
-npm install multer
-```
+- `multer` - to handle image 
 
 ## Running the files:
 1. `node server.js` - this will activate the DB and the backend port 3001
@@ -119,15 +108,15 @@ You should see something like this:
     - I built the backend code before thinking deeply about what I want my frontend to be able to do so I created routes/controllers function based on what I think I need. As I flesh out the backend, I will need to rewrite the backend code.
 - flesh out schemas
     - same issue: I create the schema without thinking too much about features. As I get a better sense of what features I want to include I will need to rewrite the schema
-        - **Tags**
-        - **Better organize what type I need in post schema**
-        - **user profile picture?**
-        - **rewrite authenticate with OAuth with Gmail and add email field in user schema** 
-            - **use email to sign in instead of username**
+        - Tags
+        - Better organize what type I need in post schema
+        - user profile picture?
+        - rewrite authenticate with OAuth with Gmail and add email field in user schema*
+            - use email to sign in instead of username
  - rewrite Jest file
     - same issue: I have since edited the controller functions so I should rewrite the Jest test cases also
 - **Future**
-    - **figure out a queuing system to handle a lot of requests to a single endpoint**
-    - **figure out how to add a cooldown period to prevent DDOS attack**
-    - **figure out optimazation as I go**
-    - **figure out how to make my backend more secure**       
+    - figure out a queuing system to handle a lot of requests to a single endpoint
+    - figure out how to add a cooldown period to prevent DDOS attack
+    - figure out optimization as I go
+    - figure out how to make my backend more secure
