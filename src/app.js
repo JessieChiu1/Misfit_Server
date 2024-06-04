@@ -35,6 +35,10 @@ app.use("/api/v1/post", require("./routes/post"))
 app.use("/api/v1/photo", require("./routes/photo"))
 app.use("/api/v1/comment", require("./routes/comment"))
 
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "Hello World!"})
+})
+
 //Connect to the database before listening to avoid cyclic error
 connectDB().then(() => {
     app.listen(PORT, () => {

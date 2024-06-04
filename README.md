@@ -2,6 +2,8 @@
 
 The server is hosted on Cyclic and will automatically redeploy when it detect changes to main. Workflow will be to work on new feature on branches and then merge with main after.
 
+The server is originally deployed via Cyclic, but that has since been shut down. It is now deployed via an AWS EC2 instance.
+
 ## Setting up .env file 
 Your `.env` file should look something like this:
 ```
